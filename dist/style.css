@@ -1,0 +1,11 @@
+* {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+#title {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    border: 40px solid rgb(81, 164, 212);
+    background-color: rgb(81, 164, 212);
+}
