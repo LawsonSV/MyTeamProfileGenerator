@@ -7,7 +7,7 @@ test("Check Employee Name", function(){
 
 test("Check Employee ID", function(){
     var testObject = new Employee("Tim", 26)
-    expect(testObject.id).toBe(123)
+    expect(testObject.id).toBe(26)
 })
 
 test("Check Employee email", function(){
@@ -26,6 +26,6 @@ test("Check getId", function(){
 })
 
 test("Check getEmail", function(){
-    var testObject = new Employee("Bryan",123 ,'junk@junk.com')
-    expect(testObject.getEmail()).toBe('junk@junk.com')
+    var testObject = new Employee("Tim", 26 ,'happy@slappy.com')
+    expect(testObject.getEmail()).toBe('happy@slappy.com')
 })

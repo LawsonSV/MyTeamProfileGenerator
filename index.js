@@ -32,7 +32,6 @@ const managerPrompt = () => {
     ]).then(response => {
         const newManager = new Manager(response.nameManager, response.idManager, response.emailManager, response.phoneManager)
         employeeArr.push(newManager)
-        addToPage();
         newEmployeePrompt();
     })
 }
@@ -84,7 +83,6 @@ const engineerPrompt = () => {
     ]).then(response => {
         const newEngineer = new Engineer(response.nameEngineer, response.idEngineer, response.emailEngineer, response.githubEngineer)
         employeeArr.push(newEngineer)
-        addToPage();
         newEmployeePrompt();
     })
 }
@@ -114,46 +112,42 @@ const internPrompt = () => {
     ]).then(response => {
         const newIntern = new Intern(response.nameIntern, response.idIntern, response.emailIntern, response.githubIntern)
         employeeArr.push(newIntern)
-        addToPage();
         newEmployeePrompt();
-    })
-}
-
-function addToPage(element) {
-    employeeArr.forEach(element => {
-        if (element.getRole() === "manager") {
-            blankPage += `<div class="card">
-        <div class="card-body">
-            <h5 class="card-title">${element.name}: Manager</h5>
-            <h6 class="card-text">ID: ${element.id}</h6>
-            <h6 class="card-text">Email: ${element.email}</h6>
-            <h6 class="card-text">Office Phone Number: ${element.phone}</h6>
-        </div>
-        </div>`
-        } else if (element.getRole() === "engineer") {
-            blankPage += `<div class="card">
-        <div class="card-body">
-            <h5 class="card-title">${element.name}: Engineer</h5>
-            <h6 class="card-text">ID: ${element.id}</h6>
-            <h6 class="card-text">Email: ${element.email}</h6>
-            <h6 class="card-text">Graduated from: ${element.school}</h6>
-        </div>
-        </div>`
-        } else if (element.getRole() === "intern") {
-            blankPage += `<div class="card">
-        <div class="card-body">
-            <h5 class="card-title">${element.name}: Intern</h5>
-            <h6 class="card-text">ID: ${element.id}</h6>
-            <h6 class="card-text">Email: ${element.email}</h6>
-            <h6 class="card-text">GitHub username: ${element.github}</h6>
-        </div>
-        </div>`
-        }
     })
 }
 
 function generatePage() {
     console.log(employeeArr)
+    employeeArr.forEach(role => {
+        if (role.getRole() === "manager") {
+            blankPage += `<div class="card">
+        <div class="card-body">
+            <h5 class="card-title">${role.name}: Manager</h5>
+            <h6 class="card-text">ID: ${role.id}</h6>
+            <h6 class="card-text">Email: ${role.email}</h6>
+            <h6 class="card-text">Office Phone Number: ${role.phone}</h6>
+        </div>
+        </div>`
+        } else if (role.getRole() === "intern") {
+            blankPage += `<div class="card">
+        <div class="card-body">
+            <h5 class="card-title">${role.name}: Engineer</h5>
+            <h6 class="card-text">ID: ${role.id}</h6>
+            <h6 class="card-text">Email: ${role.email}</h6>
+            <h6 class="card-text">Graduated from: ${role.school}</h6>
+        </div>
+        </div>`
+        } else if (role.getRole() === "engineer") {
+            blankPage += `<div class="card">
+        <div class="card-body">
+            <h5 class="card-title">${role.name}: Intern</h5>
+            <h6 class="card-text">ID: ${role.id}</h6>
+            <h6 class="card-text">Email: ${role.email}</h6>
+            <h6 class="card-text">GitHub username: ${role.github}</h6>
+        </div>
+        </div>`
+        }
+    
     const starterHtml = `<!DOCTYPE html>
         <html lang="en">
         
@@ -175,6 +169,7 @@ function generatePage() {
     fs.writeFileSync('./dist/index.html', starterHtml, function (error) {
         if (error) throw error
     });
+})
 }
 
 managerPrompt()
