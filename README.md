@@ -8,5 +8,3 @@ Additionally, I had to write tests to prove that all of the class methods/functi
 
 ## Link to video walkthough:
 https://www.youtube.com/watch?v=Wa70jZRkZy0
-
-## Link to deployed HTML page:
