@@ -1,65 +1,64 @@
 const inquirer = require("inquirer");
 const fs = require('fs');
-const { type } = require("express/lib/response");
-// const generateEngineer = require("./src/src")
-// const generateIntern = require("./src/src")
-// const generateManager = require("./src/src")
-// const starterHtml = require("./src/src")
+const Manager = require('./lib/manager')
+const Engineer = require('./lib/engineer')
+const Intern = require('./lib/intern')
+const employeeArr = []
+
 
 const managerPrompt = () => {
     inquirer.prompt([
         {
             type: 'input',
-            name: 'name',
+            name: 'nameManager',
             message: "What is your manager's name?"
         },
         {
-            name: 'id',
+            name: 'idManager',
             type: 'input',
             message: "What is your manager's ID number?"
         },
         {
-            name: 'email',
+            name: 'emailManager',
             type: 'input',
             message: "What is your manager's email address?"
         },
         {
-            name: 'phone',
+            name: 'phoneManager',
             type: 'input',
             message: "What is your manager's office phone number?"
-        },
-        {
-            name: "add",
-            type: "list",
-            message: "Would you like to add more employees?",
-            choices: ["yes", "no"]
         }
-    ])
-        .then(function (answers) {
-            if (answers.add === "yes") {
-                employeePrompt()
-            } else {
-                starterHtml()
-                    .then((answers) => {
-                        const managerContent = generateManager(answers);
-                        fs.writeFile('./dist/index.html', htmlPageContent, (err) =>
-                            err ? console.log(err) : console.log('Successfully created README.md!')
-                        )
-                    })
-            }
-        })
+    ]).then(response =>{
+        const newManager = new Manager (response.nameManager, response. idManager, response.emailManager, response.phoneManager)
+        employeeArr.push(newManager)
+        newEmployeePrompt()
+    })
 }
 
-
+const newEmployeePrompt = () => {
+    inquirer.prompt([
+        {
+            type: 'list',
+            message: "Add a new member or quit and create page:",
+            name: 'employeeChoice',
+            choices: ['Engineer', 'Intern', 'Quit']
+        }
+    ]).then(response => {
+        switch (response.employeeChoice) {
+            case 'Engineer':
+                newEngineer();
+                break;
+            case 'Intern':
+                newIntern();
+                break
+            default:
+                makeHtml()
+        }
+    })
+}
 
 const employeePrompt = (answer) => {
     inquirer.prompt([
-        {
-            name: "job",
-            message: "Pick your next employee or finish your team",
-            type: "list",
-            choices: ['engineer', 'intern']
-        },
         {
             name: 'name',
             type: 'input',
@@ -87,19 +86,6 @@ const employeePrompt = (answer) => {
             choices: ["yes", "no"]
         }
     ])
-        .then(function (answers) {
-            if (answers.add === "yes") {
-                employeePrompt()
-            } else {
-                starterHtml()
-                    .then((answers) => {
-                        const managerContent = generateManager(answers);
-                        fs.writeFile('./dist/index.html', htmlPageContent, (err) =>
-                            err ? console.log(err) : console.log('Successfully created README.md!')
-                        )
-                    })
-            }
-        })
 }
 
 const starterHtml = () => {
