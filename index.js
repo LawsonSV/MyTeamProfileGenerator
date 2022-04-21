@@ -3,7 +3,8 @@ const fs = require('fs');
 const Manager = require('./lib/manager')
 const Engineer = require('./lib/engineer')
 const Intern = require('./lib/intern')
-const employeeArr = []
+const employeeArr = [];
+let blankPage = "";
 
 
 const managerPrompt = () => {
@@ -31,7 +32,8 @@ const managerPrompt = () => {
     ]).then(response => {
         const newManager = new Manager(response.nameManager, response.idManager, response.emailManager, response.phoneManager)
         employeeArr.push(newManager)
-        newEmployeePrompt()
+        addToPage();
+        newEmployeePrompt();
     })
 }
 
@@ -41,18 +43,18 @@ const newEmployeePrompt = () => {
             type: 'list',
             message: "Add a new member or quit and create page:",
             name: 'employeeChoice',
-            choices: ['Engineer', 'Intern', 'Quit']
+            choices: ['engineer', 'intern', 'Quit']
         }
     ]).then(response => {
         switch (response.employeeChoice) {
-            case 'Engineer':
+            case 'engineer':
                 engineerPrompt();
                 break;
-            case 'Intern':
+            case 'intern':
                 internPrompt();
                 break
             default:
-                generatePage()
+                generatePage();
         }
     })
 }
@@ -82,7 +84,8 @@ const engineerPrompt = () => {
     ]).then(response => {
         const newEngineer = new Engineer(response.nameEngineer, response.idEngineer, response.emailEngineer, response.githubEngineer)
         employeeArr.push(newEngineer)
-        newEmployeePrompt()
+        addToPage();
+        newEmployeePrompt();
     })
 }
 
@@ -111,107 +114,67 @@ const internPrompt = () => {
     ]).then(response => {
         const newIntern = new Intern(response.nameIntern, response.idIntern, response.emailIntern, response.githubIntern)
         employeeArr.push(newIntern)
-        newEmployeePrompt()
+        addToPage();
+        newEmployeePrompt();
+    })
+}
+
+function addToPage(element) {
+    employeeArr.forEach(element => {
+        if (element.getRole() === "manager") {
+            blankPage += `<div class="card">
+        <div class="card-body">
+            <h5 class="card-title">${element.name}: Manager</h5>
+            <h6 class="card-text">ID: ${element.id}</h6>
+            <h6 class="card-text">Email: ${element.email}</h6>
+            <h6 class="card-text">Office Phone Number: ${element.phone}</h6>
+        </div>
+        </div>`
+        } else if (element.getRole() === "engineer") {
+            blankPage += `<div class="card">
+        <div class="card-body">
+            <h5 class="card-title">${element.name}: Engineer</h5>
+            <h6 class="card-text">ID: ${element.id}</h6>
+            <h6 class="card-text">Email: ${element.email}</h6>
+            <h6 class="card-text">Graduated from: ${element.school}</h6>
+        </div>
+        </div>`
+        } else if (element.getRole() === "intern") {
+            blankPage += `<div class="card">
+        <div class="card-body">
+            <h5 class="card-title">${element.name}: Intern</h5>
+            <h6 class="card-text">ID: ${element.id}</h6>
+            <h6 class="card-text">Email: ${element.email}</h6>
+            <h6 class="card-text">GitHub username: ${element.github}</h6>
+        </div>
+        </div>`
+        }
     })
 }
 
 function generatePage() {
+    console.log(employeeArr)
+    const starterHtml = `<!DOCTYPE html>
+        <html lang="en">
+        
+        <head>
+            <meta charset="UTF-8">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+                integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+            <link rel="stylesheet" href="./style.css">
+            <title>Team Profile</title>
+        </head>
+        <body>
+            <h1 id="title">My Team</h1>
+            ${blankPage}
+            </body>
+            </html>`;
 
-    let blankPage = "";
-
-    employeeArr.forEach(role => {
-        if (role.getRole() === "manager") {
-            blankPage += `<div class="card">
-        <div class="card-body">
-            <h5 class="card-title">${role.name}: Manager</h5>
-            <h6 class="card-text">ID: ${role.id}</h6>
-            <h6 class="card-text">Email: ${role.email}</h6>
-            <h6 class="card-text">Office Phone Number: ${role.phone}</h6>
-        </div>
-        </div>`
-        } else if (role.getRole() === "Engineer") {
-            blankPage += `<div class="card">
-        <div class="card-body">
-            <h5 class="card-title">${role.name}: Engineer</h5>
-            <h6 class="card-text">ID: ${role.id}</h6>
-            <h6 class="card-text">Email: ${role.email}</h6>
-            <h6 class="card-text">Graduated from: ${role.school}</h6>
-        </div>
-        </div>`
-        } else if (role.getRole() === "Intern") {
-            blankPage += `<div class="card">
-        <div class="card-body">
-            <h5 class="card-title">${role.name}: Intern</h5>
-            <h6 class="card-text">ID: ${role.id}</h6>
-            <h6 class="card-text">Email: ${role.email}</h6>
-            <h6 class="card-text">GitHub username: ${role.github}</h6>
-        </div>
-        </div>`
-        }
-        const starterHtml = `<!DOCTYPE html>
-    <html lang="en">
-    
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
-            integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-        <link rel="stylesheet" href="./style.css">
-        <title>Team Profile</title>
-    </head>
-    ${blankPage}
-    <body>
-        <h1 id="title">My Team</h1>
-        </body>
-        </html>`
-    })
-}
-
-const generateManager = ({ name, id, email, phone }) => {
-    return `<div class="card">
-    <div class="card-body">
-        <h5 class="card-title">${name}: Manager</h5>
-        <h6 class="card-text">ID: ${id}</h6>
-        <h6 class="card-text">Email: ${email}</h6>
-        <h6 class="card-text">Office Phone Number: ${phone}</h6>
-    </div>
-    </div>`
-}
-
-const generateEngineer = ({ name, id, email, github }) => {
-    return `<div class="card">
-        <div class="card-body">
-            <h5 class="card-title">${name}: Manager</h5>
-            <h6 class="card-text">ID: ${id}</h6>
-            <h6 class="card-text">Email: ${email}</h6>
-            <h6 class="card-text">Office Phone Number: ${github}</h6>
-        </div>
-        </div>`
-}
-
-const generateIntern = ({ name, id, email, school }) => {
-    return `<div class="card">
-        <div class="card-body">
-            <h5 class="card-title">${name}: Manager</h5>
-            <h6 class="card-text">ID: ${id}</h6>
-            <h6 class="card-text">Email: ${email}</h6>
-            <h6 class="card-text">Office Phone Number: ${school}</h6>
-        </div>
-        </div>`
-}
-
-const finisherHtml = () => {
-    return `</body>
-                </html>`
-}
-
-const writeFile = () => {
-    fs.writeFile('index.html', htmlPageContent, (err) =>
-        err ? console.log(err) : console.log('Successfully created README.md!')
-    )
+    fs.writeFileSync('./dist/index.html', starterHtml, function (error) {
+        if (error) throw error
+    });
 }
 
 managerPrompt()
-// .then(employeePrompt())
-// .then(writeFile()) 
