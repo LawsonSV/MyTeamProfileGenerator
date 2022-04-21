@@ -6,5 +6,7 @@ onto an html document in order to a list of team members or "team profile".
 
 Additionally, I had to write tests to prove that all of the class methods/functions in the libraries folder were functioning properly.
 
-## Link to video walkthough
+## Link to video walkthough:
+https://www.youtube.com/watch?v=Wa70jZRkZy0
 
+## Link to deployed HTML page:
