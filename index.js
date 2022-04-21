@@ -28,8 +28,8 @@ const managerPrompt = () => {
             type: 'input',
             message: "What is your manager's office phone number?"
         }
-    ]).then(response =>{
-        const newManager = new Manager (response.nameManager, response. idManager, response.emailManager, response.phoneManager)
+    ]).then(response => {
+        const newManager = new Manager(response.nameManager, response.idManager, response.emailManager, response.phoneManager)
         employeeArr.push(newManager)
         newEmployeePrompt()
     })
@@ -46,50 +46,109 @@ const newEmployeePrompt = () => {
     ]).then(response => {
         switch (response.employeeChoice) {
             case 'Engineer':
-                newEngineer();
+                engineerPrompt();
                 break;
             case 'Intern':
-                newIntern();
+                internPrompt();
                 break
             default:
-                makeHtml()
+                generatePage()
         }
     })
 }
 
-const employeePrompt = (answer) => {
+const engineerPrompt = () => {
     inquirer.prompt([
         {
-            name: 'name',
+            name: 'nameEngineer',
             type: 'input',
-            message: "What is your employee's name?"
+            message: "What is your engineer's name?"
         },
         {
-            name: "id",
+            name: "idEngineer",
             type: "input",
-            message: "What is your employee's ID number?"
+            message: "What is your engineer's ID number?"
         },
         {
-            name: "email",
+            name: "emailEngineer",
             type: "input",
-            message: "What is your employee's email address?"
+            message: "What is your engineer's email address?"
         },
         {
-            name: "github",
+            name: "githubEngineer",
             type: "input",
-            message: "What is your employee's GitHub username?"
-        },
-        {
-            name: "add",
-            type: "list",
-            message: "Would you like to add more employees?",
-            choices: ["yes", "no"]
+            message: "What is your engineer's GitHub username?"
         }
-    ])
+    ]).then(response => {
+        const newEngineer = new Engineer(response.nameEngineer, response.idEngineer, response.emailEngineer, response.githubEngineer)
+        employeeArr.push(newEngineer)
+        newEmployeePrompt()
+    })
 }
 
-const starterHtml = () => {
-    return `<!DOCTYPE html>
+const internPrompt = () => {
+    inquirer.prompt([
+        {
+            name: 'nameIntern',
+            type: 'input',
+            message: "What is your intern's name?"
+        },
+        {
+            name: "idIntern",
+            type: "input",
+            message: "What is your intern's ID number?"
+        },
+        {
+            name: "emailIntern",
+            type: "input",
+            message: "What is your intern's email address?"
+        },
+        {
+            name: "githubIntern",
+            type: "input",
+            message: "What school did your intern graduate from?"
+        }
+    ]).then(response => {
+        const newIntern = new Intern(response.nameIntern, response.idIntern, response.emailIntern, response.githubIntern)
+        employeeArr.push(newIntern)
+        newEmployeePrompt()
+    })
+}
+
+function generatePage() {
+
+    let blankPage = "";
+
+    employeeArr.forEach(role => {
+        if (role.getRole() === "manager") {
+            blankPage += `<div class="card">
+        <div class="card-body">
+            <h5 class="card-title">${role.name}: Manager</h5>
+            <h6 class="card-text">ID: ${role.id}</h6>
+            <h6 class="card-text">Email: ${role.email}</h6>
+            <h6 class="card-text">Office Phone Number: ${role.phone}</h6>
+        </div>
+        </div>`
+        } else if (role.getRole() === "Engineer") {
+            blankPage += `<div class="card">
+        <div class="card-body">
+            <h5 class="card-title">${role.name}: Engineer</h5>
+            <h6 class="card-text">ID: ${role.id}</h6>
+            <h6 class="card-text">Email: ${role.email}</h6>
+            <h6 class="card-text">Graduated from: ${role.school}</h6>
+        </div>
+        </div>`
+        } else if (role.getRole() === "Intern") {
+            blankPage += `<div class="card">
+        <div class="card-body">
+            <h5 class="card-title">${role.name}: Intern</h5>
+            <h6 class="card-text">ID: ${role.id}</h6>
+            <h6 class="card-text">Email: ${role.email}</h6>
+            <h6 class="card-text">GitHub username: ${role.github}</h6>
+        </div>
+        </div>`
+        }
+        const starterHtml = `<!DOCTYPE html>
     <html lang="en">
     
     <head>
@@ -101,9 +160,12 @@ const starterHtml = () => {
         <link rel="stylesheet" href="./style.css">
         <title>Team Profile</title>
     </head>
-    
+    ${blankPage}
     <body>
-        <h1 id="title">My Team</h1>`
+        <h1 id="title">My Team</h1>
+        </body>
+        </html>`
+    })
 }
 
 const generateManager = ({ name, id, email, phone }) => {
